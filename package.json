@@ -28,8 +28,8 @@
   "homepage": "https://github.com/mmckegg/loopjs-www",
   "dependencies": {
     "mkdirp": "^0.5.0",
-    "loop-drop-audio-context": "^1.0.0",
-    "loop-drop-remote": "~0.4.0",
+    "loop-drop-audio-context": "^2.0.0",
+    "loop-drop-remote": "^1.0.0",
     "rincewind": "^1.8.0",
     "rincewind-watch": "^0.1.0",
     "watchify": "^0.7.2",
