@@ -1,0 +1,30 @@
+BuyButton {
+  display: block
+  border: 1px solid #5E8915
+  background-color: #4B6417;
+  color: #FFF;
+  box-shadow: 0 0 10px #222;  
+  border-radius: 4px;
+  padding: 10px;
+  cursor: pointer;
+  font-size: 130%;
+
+  :focus {
+    outline-style: none;
+    color: white;
+    z-index: 100;
+  }
+
+  :hover {
+    border: 1px solid #D5FF8E;
+      background-color: #659600;
+    box-shadow: 0 0 20px #2A2;
+    text-decoration: none
+  }
+
+  em {
+    display: block
+    color: #DDD
+    font-size: 70%
+  }
+}

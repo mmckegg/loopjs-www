@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Downloading Loop Drop</title>
+    <link rel='stylesheet' href='/bundle.css'/>
+    <link rel="shortcut icon" href="/favicon.png"/>
+  </head>
+  <body>
+    <div class='Main'>
+      <a href='/'>
+        <img class='.logo' style='float:left;margin-right: 20px' width='300' src='/loop-drop.png' />
+      </a>
+      <section>
+        <header>
+          <h1>Thanks for your payment!<br/><em>Download will start shortly...</em></h1>
+        </header>
+        <div >
+          <p>
+            You should also receive an <strong>email</strong> with a <strong>link to redownload later</strong>. 
+          </p>
+        </div>
+        <div class='FileDownload -zip'>
+          <a href='<%= downloadUrl %>'><%= fileName %></a>
+        </div>
+        <iframe id="download" src="<%= downloadUrl %>" style="display:none"></iframe>
+      </section>
+
+      <section class='-feature'>
+        <header>
+          <h1>If you need <em>help</em>, send an <em>email</em> to <a href='mailto:matt@wetsand.co.nz'>matt@wetsand.co.nz</a><br/>or contact me on <em>twitter</em> <a href='https://twitter.com/mmckegg'>@MattMcKegg</a></h1>
+        </header>
+        <div>
+          <p>You can <em>request a refund</em> up to 7 days from date of purchase if you discover the app <em>wasn't what you thought it would be</em>. See purchase email for instant refund link.</p>
+        </div>
+      </section>
+    </div>
+  </body>
+</html>

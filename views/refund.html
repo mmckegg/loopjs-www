@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Loop Drop Refund</title>
+    <link rel='stylesheet' href='/bundle.css'/>
+    <link rel="shortcut icon" href="/favicon.png"/>
+  </head>
+  <body>
+    <div class='Main'>
+      <a href='/'>
+        <img class='.logo' style='float:left;margin-right: 20px' width='300' src='/loop-drop.png' />
+      </a>
+      <section>
+
+        <header>
+          <h1>App wasn't what you thought?<br/><em>Sorry about that.</em></h1>
+        </header>
+
+        <div>
+          <p>I'm <strong>working hard to improve Loop Drop</strong>, so if you like the idea please be sure to <strong>check back again later</strong>!</p>
+        </div>
+
+        <header>
+          <p>If you need <em>help</em>, send an <em>email</em> to <a href='mailto:matt@wetsand.co.nz'>matt@wetsand.co.nz</a><br/>or contact me on <em>twitter</em> <a href='https://twitter.com/mmckegg'>@MattMcKegg</a><p>
+        </header>
+
+      </section>
+
+      <% if (status === 'Refund-Available') { %>
+      <section class='-feature'>
+        <header>
+          <h1><strong>Want your money back?</strong></h1>
+          <p>Since it's been less than 7 days since you purchased, you can fill out this form for an <em>instant refund</em>.</p>
+        </header>
+
+        <form class='RefundForm' method='POST'>
+          <div>
+            <label for='criticism'>Tell me what went wrong (please)</label>
+            <textarea rows='3' id='criticism' name='criticism'></textarea>
+          </div>
+          <footer>
+            <button type='submit'>Refund Now!</button> or <a href='/'>changed your mind?</a>
+          </footer>
+        </form>
+      </section>
+      <% } else if (status === 'Refund-Expired') { %>
+      <section class='-feature'>
+        <header>
+          <h1>
+            It has been <em>more than 7 days</em> since you purchased the app, so I can no longer provide an instant refund.
+          </h1>
+          <p>
+            But if you feel bad about this, please <a href='mailto:matt@wetsand.co.nz'>contact me directly</a> and we can talk about it.
+          </p>
+        </header>
+      </section>
+      <% } else if (status === 'Refunded') { %>
+      <section class='-feature'>
+        <h1>
+          <strong>Your purchase has been refunded in full.</strong>
+          <p>Don't feel bad. It happens. I'll try not to feel bad either...</p>
+        </h1>
+      </section>
+      <% } %>
+    </div>
+  </body>
+</html>

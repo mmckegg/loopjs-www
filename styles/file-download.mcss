@@ -1,0 +1,12 @@
+FileDownload {
+  margin: 10px auto
+  padding: 20px
+  text-align: center
+
+  a {
+    border-radius: 10px
+    background: #222 url('/zip.svg') no-repeat 10px
+    display: inline-block
+    padding: 15px 15px 15px 45px
+  }
+}

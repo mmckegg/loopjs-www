@@ -1,0 +1,29 @@
+RefundForm {
+  div {
+    label {
+      margin-top: 20px
+      display: block
+      font-size: 110%
+      color: #CFC
+      font-weight: bold
+    }
+
+    textarea {
+      border: 2px solid black
+      margin: 10px 0
+      padding: 10px
+      font-family: "Comic Sans MS"
+      color: #FAA
+      background: #333
+      font-size: 150%
+      display: block
+      width: 100%
+    }
+  }
+  footer {
+    button {
+      font: inherit
+      padding: 10px 
+    }
+  }
+}
