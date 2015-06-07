@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: /buy-loop-drop/*
+Allow: /buy-loop-drop/$
