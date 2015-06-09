@@ -4,7 +4,7 @@ var express = require('express')
 var app = express()
 app.use(express.static(__dirname + '/public'))
 
-app.use('/buy-loop-drop', require('./buy'))
+app.use('/loop-drop', require('./loop-drop'))
 app.get('/bundle.css', require('./styles/serve'))
 
 http.createServer(app).listen(8080);

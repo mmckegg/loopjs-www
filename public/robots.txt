@@ -1,3 +1,5 @@
 User-agent: *
-Disallow: /buy-loop-drop/*
-Allow: /buy-loop-drop/$
+Disallow: /loop-drop/buy-now
+Disallow: /loop-drop/download/*
+Disallow: /loop-drop/download-now/*
+Disallow: /loop-drop/refund/*
