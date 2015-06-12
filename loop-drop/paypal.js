@@ -63,8 +63,8 @@ Paypal.prototype.complete = function(token, payer, callback) {
     params.PAYMENTACTION = 'Sale';
     params.PAYERID = payer;
     params.TOKEN = token;
-    params.AMT = custom[1];
-    params.CURRENCYCODE = custom[2];
+    params.AMT = custom[2];
+    params.CURRENCYCODE = custom[3];
     params.METHOD = 'DoExpressCheckoutPayment';
 
     self.request(self.url, 'POST', params, function(err, doData) {
@@ -74,20 +74,20 @@ Paypal.prototype.complete = function(token, payer, callback) {
         return;
       }
 
-      callback(null, extend(data, doData), custom[0], custom[1]);
+      callback(null, extend(data, doData), custom[0], custom[2]);
     })
   });
 
   return self;
 };
 
-Paypal.prototype.pay = function(invoiceNumber, amout, description, currency, callback) {
+Paypal.prototype.pay = function(invoiceNumber, code, amount, description, currency, callback) {
 
   var self = this;
   var params = self.params();
 
   params.PAYMENTACTION = 'Sale';
-  params.AMT = prepareNumber(amout);
+  params.AMT = prepareNumber(amount);
   params.RETURNURL = self.returnUrl;
   params.CANCELURL = self.cancelUrl;
   params.DESC = description;
@@ -96,7 +96,7 @@ Paypal.prototype.pay = function(invoiceNumber, amout, description, currency, cal
   params.CURRENCYCODE = currency;
   params.METHOD = 'SetExpressCheckout';
   params.INVNUM = invoiceNumber;
-  params.CUSTOM = invoiceNumber + '|' + params.AMT + '|' + currency;
+  params.CUSTOM = invoiceNumber + '|' + code + '|' + params.AMT + '|' + currency;
 
   self.request(self.url, 'POST', params, function(err, data) {
 
@@ -129,6 +129,49 @@ Paypal.prototype.detail = function(transaction, callback) {
       return callback(err, null);
     } else if (data.ACK === 'Success') {
       return callback(null, data);
+    } else {
+      callback(new Error('ACK ' + data.ACK + ': ' + data.L_LONGMESSAGE0), null);
+    }
+  });
+
+  return self;
+};
+
+Paypal.prototype.detail = function(transaction, callback) {
+
+  var self = this;
+  var params = self.params();
+
+  params.METHOD = 'GetTransactionDetails';
+  params.TRANSACTIONID = transaction
+
+  self.request(self.url, 'POST', params, function(err, data) {
+    if (err) {
+      return callback(err, null);
+    } else if (data.ACK === 'Success') {
+      return callback(null, data);
+    } else {
+      callback(new Error('ACK ' + data.ACK + ': ' + data.L_LONGMESSAGE0), null);
+    }
+  });
+
+  return self;
+};
+
+Paypal.prototype.search = function(email, callback) {
+
+  var self = this;
+  var params = self.params();
+
+  params.METHOD = 'TransactionSearch';
+  params.EMAIL = email
+  params.STARTDATE = '2015-01-01T00:00:00Z'
+
+  self.request(self.url, 'POST', params, function(err, data) {
+    if (err) {
+      return callback(err, null);
+    } else if (data.ACK === 'Success') {
+      return callback(null, formatSearchResults(data));
     } else {
       callback(new Error('ACK ' + data.ACK + ': ' + data.L_LONGMESSAGE0), null);
     }
@@ -241,3 +284,16 @@ exports.create = function(username, password, signature, returnUrl, cancelUrl, d
   return exports.init(username, password, signature, returnUrl, cancelUrl, debug);
 };
 
+
+function formatSearchResults(data) {
+  var matcher = /^L_([A-Z]+)([0-9]+)$/
+  var results = []
+  Object.keys(data).forEach(function(v) {
+    var match = matcher.exec(v)
+    if (match) {
+      var item = results[match[2]] = (results[match[2]] || [])
+      item[match[1]] = data[v]
+    }
+  })
+  return results
+}

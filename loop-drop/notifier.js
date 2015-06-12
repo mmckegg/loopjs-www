@@ -1,6 +1,6 @@
 var Mailer = require('nodemailer');
 var env = process.env.NODE_ENV || 'development'
-var root = process.env.BUY_ROOT || 'http://localhost:8080/loop-drop'
+var root = (process.env.ROOT || 'http://localhost:8080') + '/loop-drop'
 
 var user = {
   user: process.env.GMAIL_USER,
