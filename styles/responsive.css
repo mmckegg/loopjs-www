@@ -9,18 +9,22 @@
     padding-right: 0px !important;
   }
 
-
-
   img {
-    max-width: 100%;
+    max-width: 60%;
+    margin: 0 !important;
     max-height: 400px
+  }
+}
+
+@media only screen and (max-width : 600px) {
+  section {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
   }
 }
 
 @media only screen and (max-width : 1000px) {
   section.-feature {
     border-radius: 0 !important;
-    padding-left: 20px !important;
-    padding-right: 20px !important;
   }
 }
