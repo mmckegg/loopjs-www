@@ -24,6 +24,10 @@ module.exports = function(detail) {
     subject: '[Loop Drop] Thanks for purchasing!',
     text: 'Hey there,\n\n' +
           'Thanks for purchasing Loop Drop! If you have any questions please let me know on twitter @MattMcKegg or send an email to matt@wetsand.co.nz\n\n' +
+
+          'Loop Drop is still experimental and very much in active development. New versions are being released all the time, and you\'ll likely see some major changes!\n\n' +
+
+          'If you encounter bugs, please let let me know by email. I\'ll try to address them as soon as possible.\n\n' +
           
           'Over the next little while, I\'ll be uploading a bunch of tutorial videos to the YouTube channel. Hopefully these will be helpful.\n' +
           'https://www.youtube.com/channel/UC2wAgvZBPlRoqHRQ7vS0RZg\n\n' +
