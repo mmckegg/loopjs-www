@@ -1,8 +1,15 @@
 var fs = require('fs')
 var compile = require('micro-css')
 var forEach = require('async-each')
+var env = process.env.NODE_ENV || 'development'
+var cachedOutput = null
 
 module.exports = function(cb) {
+
+  if (cachedOutput) {
+    cb(null, cachedOutput)
+  }
+
   fs.readdir(__dirname, function(err, files) {
     var result = ''
     var additional = ''
@@ -25,7 +32,14 @@ module.exports = function(cb) {
       }
     }, function(err) {
       if (err) return cb(err)
-      cb(null, compile(result) + additional)
+      var compiled = compile(result) + additional
+
+      if (env === 'production') {
+        // cache the output for production
+        cachedOutput = compiled
+      }
+
+      cb(null, compiled)
     })
   })
 }
