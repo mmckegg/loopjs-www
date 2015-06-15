@@ -9,7 +9,7 @@
     padding-right: 0px !important;
   }
 
-  img {
+  header > img {
     max-width: 60%;
     margin: 0 !important;
     max-height: 400px
