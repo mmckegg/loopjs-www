@@ -7,7 +7,7 @@ var cachedOutput = null
 module.exports = function(cb) {
 
   if (cachedOutput) {
-    cb(null, cachedOutput)
+    return cb(null, cachedOutput)
   }
 
   fs.readdir(__dirname, function(err, files) {
