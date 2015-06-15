@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "restart": "pm2 restart loopjs-www",
-    "pull": "git pull && npm update && npm run restart"
+    "pull": "git pull && npm update && pm2 restart loopjs-www"
   },
   "repository": {
     "type": "git",
