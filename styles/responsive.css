@@ -21,10 +21,19 @@
     padding-left: 20px !important;
     padding-right: 20px !important;
   }
+
+  .ImageSteps > img {
+    max-width: 100%;
+    width: 100%;
+  }
 }
 
 @media only screen and (max-width : 1000px) {
   section.-feature {
     border-radius: 0 !important;
   }
+}
+
+section.-feature + section {
+  border-top: none;
 }

@@ -76,6 +76,8 @@ Main {
 
   section {
 
+    border-top: 10px solid #555;
+
     (em) {
       font-weight: bold
       color: white
@@ -96,6 +98,7 @@ Main {
     }
 
     -feature {
+      border-top: none;
       background: #111
       border-radius: 20px
     }
