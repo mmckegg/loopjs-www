@@ -1,4 +1,5 @@
 @media only screen and (max-width : 900px) {
+
   .Main > header > * {
     text-align: center !important;
     display: inline-block;
@@ -31,6 +32,10 @@
 @media only screen and (max-width : 1000px) {
   section.-feature {
     border-radius: 0 !important;
+  }
+
+  .Main {
+    width: 100%;
   }
 }
 
