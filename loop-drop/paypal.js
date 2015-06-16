@@ -4,6 +4,7 @@ var urlParser = require('url');
 var https = require('https');
 var querystring = require('querystring');
 var extend = require('xtend');
+var merge = require('xtend/mutable');
 
 function Paypal(username, password, signature, returnUrl, cancelUrl, debug) {
 
@@ -18,6 +19,10 @@ function Paypal(username, password, signature, returnUrl, cancelUrl, debug) {
   this.url = 'https://' + (debug ? 'api-3t.sandbox.paypal.com' : 'api-3t.paypal.com') + '/nvp';
   this.redirect = 'https://' + (debug ? 'www.sandbox.paypal.com/cgi-bin/webscr' : 'www.paypal.com/cgi-bin/webscr');
 };
+
+Paypal.prototype.setPayOptions = function(options) {
+  this.payOptions = options;
+}
 
 Paypal.prototype.params = function() {
   var self = this;
@@ -97,6 +102,11 @@ Paypal.prototype.pay = function(invoiceNumber, code, amount, description, curren
   params.METHOD = 'SetExpressCheckout';
   params.INVNUM = invoiceNumber;
   params.CUSTOM = invoiceNumber + '|' + code + '|' + params.AMT + '|' + currency;
+
+
+  if (self.payOptions) {
+    merge(params, self.payOptions)
+  }
 
   self.request(self.url, 'POST', params, function(err, data) {
 

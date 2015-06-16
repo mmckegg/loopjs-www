@@ -27,6 +27,10 @@ var paypal = PayPal.init(
   env === 'development'
 )
 
+paypal.setPayOptions({
+  PAGESTYLE: "LoopDrop"
+})
+
 app.get('/', function(req, res) {
   res.redirect('/')
 })
