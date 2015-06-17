@@ -14,7 +14,7 @@ var root = (process.env.ROOT || 'http://localhost:8080') + '/loop-drop'
 
 var latest = '2.8.0'
 var fileName = 'Loop Drop v' + latest + '.dmg'
-var price = 39.00
+var price = 29.00
 
 app.engine('html', require('ejs').renderFile)
 app.set('views', path.join(__dirname, '..', 'views'))
