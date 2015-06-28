@@ -12,7 +12,7 @@ var app = module.exports = express()
 var env = process.env.NODE_ENV || 'development'
 var root = (process.env.ROOT || 'http://localhost:8080') + '/loop-drop'
 
-var latest = '2.8.0'
+var latest = '2.9.1'
 var fileName = 'Loop Drop v' + latest + '.dmg'
 var price = 15.00
 
