@@ -20,7 +20,18 @@
           </p>
         </div>
         <div class='FileDownload -zip'>
-          <a href='<%= downloadUrl %>'><%= fileName %></a>
+          <a href='<%= platforms[currentPlatform].downloadUrl %>'>
+            <%= platforms[currentPlatform].fileName %>
+          </a>
+        </div>
+      </section>
+
+      <section>
+        <div>
+          <em>Downloads for Other Platforms</em>:
+          <a href='<%= platforms.win32.downloadUrl %>'>Windows 32-bit</a> |
+          <a href='<%= platforms.win64.downloadUrl %>'>Windows 64-bit</a> |
+          <a href='<%= platforms.mac.downloadUrl %>'>Mac</a>
         </div>
       </section>
 

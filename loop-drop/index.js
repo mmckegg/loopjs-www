@@ -13,8 +13,13 @@ var env = process.env.NODE_ENV || 'development'
 var root = (process.env.ROOT || 'http://localhost:8080') + '/loop-drop'
 
 var latest = '2.9.5'
-var fileName = 'Loop Drop v' + latest + '.dmg'
 var price = 15.00
+
+var platforms = {
+  win64: 'Loop Drop v' + latest + ' x64.msi',
+  win32: 'Loop Drop v' + latest + '.msi',
+  mac: 'Loop Drop v' + latest + '.dmg'
+}
 
 app.engine('html', require('ejs').renderFile)
 app.set('views', path.join(__dirname, '..', 'views'))
@@ -139,16 +144,33 @@ app.get('/complete-purchase', function(req, res) {
 })
 
 app.get('/download/:transaction', function(req, res) {
+  var downloadUrl = root + '/download-now/' + req.params.transaction
   res.render('download.html', {
-    fileName: fileName,
-    downloadUrl: root + '/download-now/' + req.params.transaction
+
+    platforms: {
+      mac: {
+        downloadUrl: downloadUrl + '/mac',
+        fileName: platforms.mac
+      },
+      win32: {
+        downloadUrl: downloadUrl + '/win32',
+        fileName: platforms.win32
+      },
+      win64: {
+        downloadUrl: downloadUrl + '/win64',
+        fileName: platforms.win64
+      }
+    },
+
+    currentPlatform: getPlatform(req) || 'mac'
   })
 })
 
-app.get('/download-now/:transaction', function(req, res) {
+app.get('/download-now/:transaction/:platform', function(req, res) {
   paypal.detail(req.params.transaction, function(err, detail) {
     if (err) throw err
     if (getRefundStatus(detail) !== 'Refunded') {
+      var fileName = platforms[req.params.platform] || platforms.mac
       res.setHeader('Content-disposition', 'attachment; filename="' + fileName + '"');
       res.sendFile(path.join(__dirname, '../files', fileName))
       res.cookie('loop-drop-download-code', req.params.transaction, {
@@ -190,4 +212,16 @@ function getEmailStatus(email, cb) {
     })
     cb(null, payments[0])
   })
+}
+
+function getPlatform(req) {
+  var agent = req.headers['user-agent']
+  console.log(agent)
+  if (agent.match(/Macintosh/)) {
+    return 'mac'
+  } else if (agent.match(/win64/i)) {
+    return 'win64'
+  } else if (agent.match(/Windows/i)) {
+    return 'win32'
+  }
 }
