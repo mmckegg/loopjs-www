@@ -37,7 +37,7 @@ module.exports = function(detail) {
           'Download Link: ' + root + '/download/' + detail.TRANSACTIONID + '\n' +
           'You can use this link to redownload the app again in the future.\n\n' +
 
-          'Feel free to share this download link with your friends if they want to try Loop Drop! Just don\'t post it publicly.' +
+          'Feel free to share this download link with your friends if they want to try Loop Drop! Just don\'t post it publicly.\n\n' +
 
           '- Matt' + '\n\n' +
 
