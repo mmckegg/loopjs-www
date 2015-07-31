@@ -13,7 +13,7 @@ var env = process.env.NODE_ENV || 'development'
 var root = (process.env.ROOT || 'http://localhost:8080') + '/loop-drop'
 
 var latest = '2.10.1'
-var price = 15.00
+var price = 25.00
 
 var platforms = {
   win64: 'Loop Drop v' + latest + ' x64.msi',
