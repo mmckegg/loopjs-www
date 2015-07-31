@@ -117,7 +117,7 @@ app.post('/update', parseBody, function(req, res) {
 app.post('/refund/:transaction', parseBody, function(req, res) {
   paypal.detail(req.params.transaction, function(err, detail) {
     if (getRefundStatus(detail) === 'Refund-Available') {
-      logEvent('REFUND', userDetail(detail), req.body)
+      logEvent(Date.now(), 'REFUND', userDetail(detail), req.body)
       paypal.refund(req.params.transaction, req.body.criticism, function(err, result) {
         res.redirect(root + '/refund/' + req.params.transaction)
       })
@@ -138,7 +138,7 @@ app.get('/complete-purchase', function(req, res) {
   paypal.complete(req.query.token, req.query.PayerID, function(err, detail) {
     if (err) throw err
     sendWelcome(detail)
-    logEvent('PURCHASE', userDetail(detail))
+    logEvent(Date.now(), 'PURCHASE', userDetail(detail))
     res.redirect(root + '/download/' + detail.TRANSACTIONID)
   })
 })
@@ -176,7 +176,7 @@ app.get('/download-now/:transaction/:platform', function(req, res) {
       res.cookie('loop-drop-download-code', req.params.transaction, {
         maxAge: 365 * 24 * 60 * 60
       })
-      logEvent('DOWNLOAD', userDetail(detail))
+      logEvent(Date.now(), 'DOWNLOAD', userDetail(detail), req.params.platform)
     } else {
       res.redirect(root + '/refund/' + req.params.transaction)
     }
@@ -216,7 +216,6 @@ function getEmailStatus(email, cb) {
 
 function getPlatform(req) {
   var agent = req.headers['user-agent']
-  console.log(agent)
   if (agent.match(/Macintosh/)) {
     return 'mac'
   } else if (agent.match(/win64/i)) {
