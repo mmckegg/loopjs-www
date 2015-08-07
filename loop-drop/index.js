@@ -7,6 +7,7 @@ var compareVersion = require('compare-version')
 var cors = require('cors')
 var cookieParser = require('cookie-parser')()
 var sendWelcome = require('./notifier')
+var track = require('../track.js')
 
 var app = module.exports = express()
 var env = process.env.NODE_ENV || 'development'
@@ -46,6 +47,12 @@ app.get('/refund/:transaction', function(req, res) {
     if (err) throw err
 
     var status = getRefundStatus(detail)
+
+    track(req, 'View Refund Page', {
+      transactionId: detail.TRANSACTIONID,
+      status: status
+    })
+
     res.render('refund.html', {
       status: status,
       transactionId: detail.TRANSACTIONID,
@@ -57,6 +64,11 @@ app.get('/refund/:transaction', function(req, res) {
 
 app.get('/check-version/:version', cors(), function(req, res) {
   var currentVersion = req.params.version
+
+  track(req, 'Check Version', {
+    version: currentVersion
+  })
+
   if (compareVersion(currentVersion, latest) < 0) {
     res.send({
       updateAvailable: true,
@@ -85,6 +97,10 @@ app.get('/update', cookieParser, function(req, res) {
   }
 
   function render() {
+    track(req, 'Update Available', {
+      latestVersion: latest
+    })
+
     res.render('update.html', {
       latestVersion: latest,
       status: null
@@ -97,6 +113,11 @@ app.post('/update', parseBody, function(req, res) {
     getEmailStatus(req.body.email, function(err, detail) {
 
       if (detail && detail.STATUS === 'Completed') {
+        track(req, 'Request Update', {
+          name: detail.FIRSTNAME + ' ' + detail.LASTNAME,
+          email: detail.EMAIL
+        })
+
         sendWelcome(detail)
       }
 
@@ -117,6 +138,11 @@ app.post('/update', parseBody, function(req, res) {
 app.post('/refund/:transaction', parseBody, function(req, res) {
   paypal.detail(req.params.transaction, function(err, detail) {
     if (getRefundStatus(detail) === 'Refund-Available') {
+      track(req, 'Refund', {
+        name: detail.FIRSTNAME + ' ' + detail.LASTNAME,
+        email: detail.EMAIL,
+        memo: req.body.criticism
+      })
       logEvent(Date.now(), 'REFUND', userDetail(detail), req.body)
       paypal.refund(req.params.transaction, req.body.criticism, function(err, result) {
         res.redirect(root + '/refund/' + req.params.transaction)
@@ -128,6 +154,7 @@ app.post('/refund/:transaction', parseBody, function(req, res) {
 })
 
 app.get('/buy-now', function(req, res) {
+  track(req, 'Start Purchase')
   paypal.pay(Date.now(), "loop-drop", price, "Loop Drop v2 Early Adopter Download", "USD", function(err, url) {
     if (err) throw err
     res.redirect(url)
@@ -137,6 +164,11 @@ app.get('/buy-now', function(req, res) {
 app.get('/complete-purchase', function(req, res) {
   paypal.complete(req.query.token, req.query.PayerID, function(err, detail) {
     if (err) throw err
+    track(req, 'Purchase', {
+      name: detail.FIRSTNAME + ' ' + detail.LASTNAME,
+      email: detail.EMAIL,
+      amount: price
+    })
     sendWelcome(detail)
     logEvent(Date.now(), 'PURCHASE', userDetail(detail))
     res.redirect(root + '/download/' + detail.TRANSACTIONID)
@@ -145,6 +177,12 @@ app.get('/complete-purchase', function(req, res) {
 
 app.get('/download/:transaction', function(req, res) {
   var downloadUrl = root + '/download-now/' + req.params.transaction
+  var currentPlatform = getPlatform(req)
+
+  track(req, 'Download Page', {
+    userPlatform: currentPlatform
+  })
+
   res.render('download.html', {
 
     platforms: {
@@ -162,7 +200,7 @@ app.get('/download/:transaction', function(req, res) {
       }
     },
 
-    currentPlatform: getPlatform(req) || 'mac'
+    currentPlatform: currentPlatform || 'mac'
   })
 })
 
@@ -170,6 +208,14 @@ app.get('/download-now/:transaction/:platform', function(req, res) {
   paypal.detail(req.params.transaction, function(err, detail) {
     if (err) throw err
     if (getRefundStatus(detail) !== 'Refunded') {
+
+      track(req, 'Downloading', {
+        name: detail.FIRSTNAME + ' ' + detail.LASTNAME,
+        email: detail.EMAIL,
+        version: latest,
+        platform: req.params.platform
+      })
+
       var fileName = platforms[req.params.platform] || platforms.mac
       res.setHeader('Content-disposition', 'attachment; filename="' + fileName + '"');
       res.sendFile(path.join(__dirname, '../files', fileName))
@@ -184,6 +230,7 @@ app.get('/download-now/:transaction/:platform', function(req, res) {
 })
 
 app.get('/cancel-purchase', function(req, res) {
+  track(req, 'Cancel Purchase')
   res.redirect('/')
 })
 
