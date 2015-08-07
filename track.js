@@ -22,18 +22,7 @@ module.exports = function track(req, actionName, args) {
 }
 
 function getRemoteAddr(req) {
-  if (req.ip) {
-    return req.ip
-  } else if (req._remoteAddress) {
-    return req._remoteAddress 
-  } else {
-    var sock = req.socket
-    if (sock.socket) {
-      return sock.socket.remoteAddress
-    } else {
-      return sock.remoteAddress
-    }
-  }
+  return req.headers['x-forwarded-for'] || req.connection.remoteAddress
 }
 
 function formatArgs(args) {
