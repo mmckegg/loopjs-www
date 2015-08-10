@@ -57,3 +57,33 @@ module.exports = function(detail) {
     console.log(message)
   }
 }
+
+module.exports.resend = function (detail) {
+  console.log(detail)
+  var message = {
+    from: 'Matt McKegg <matt@wetsand.co.nz>',
+    to: {
+      name: detail.NAME,
+      address: env === 'development' ? 'matt@wetsand.co.nz' : detail.EMAIL
+    },
+    subject: '[Loop Drop] Your Download Link',
+    text: 'Hey there,\n\n' +
+
+          'Here\'s your download link as requested: \n' + 
+          root + '/download/' + detail.TRANSACTIONID + '\n\n' +
+          
+          'You can use this link to redownload the app again in the future. Also feel free to share this download link with your friends if they want to try Loop Drop! Just don\'t post it publicly.\n\n' +
+
+          '- Matt'
+  }
+
+  if (user && user.user) {
+    transporter.sendMail(message, function (err) {
+      if (err) {
+        console.log(err)
+      }
+    });
+  } else {
+    console.log(message)
+  }
+}

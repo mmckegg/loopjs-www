@@ -118,7 +118,7 @@ app.post('/update', parseBody, function(req, res) {
           email: detail.EMAIL
         })
 
-        sendWelcome(detail)
+        sendWelcome.resend(detail)
       }
 
       res.render('update.html', {
