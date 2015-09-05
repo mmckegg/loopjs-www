@@ -13,7 +13,7 @@ var app = module.exports = express()
 var env = process.env.NODE_ENV || 'development'
 var root = (process.env.ROOT || 'http://localhost:8080') + '/loop-drop'
 
-var latest = '2.11.0'
+var latest = '2.12.0'
 var price = 25.00
 
 var platforms = {
