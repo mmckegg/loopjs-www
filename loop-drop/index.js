@@ -1,7 +1,6 @@
 var PayPal = require('./paypal')
-var parseBody = require('body-parser').urlencoded({extended:true})
+var parseBody = require('body-parser').urlencoded({ extended: true })
 var express = require('express')
-var fs = require('fs')
 var path = require('path')
 var compareVersion = require('compare-version')
 var cors = require('cors')
@@ -26,24 +25,24 @@ app.engine('html', require('ejs').renderFile)
 app.set('views', path.join(__dirname, '..', 'views'))
 
 var paypal = PayPal.init(
-  process.env.PAYPAL_USER || 'matt-facilitator_api1.wetsand.co.nz', 
-  process.env.PAYPAL_PASS || '1403840788', 
-  process.env.PAYPAL_SIGN || 'AFcWxV21C7fd0v3bYYYRCpSSRl31A.UA.oWQg2MdEe38YLAcmOj-eLHY', 
+  process.env.PAYPAL_USER || 'matt-facilitator_api1.wetsand.co.nz',
+  process.env.PAYPAL_PASS || '1403840788',
+  process.env.PAYPAL_SIGN || 'AFcWxV21C7fd0v3bYYYRCpSSRl31A.UA.oWQg2MdEe38YLAcmOj-eLHY',
   root + '/complete-purchase',
   root + '/cancel-purchase',
   env === 'development'
 )
 
 paypal.setPayOptions({
-  PAGESTYLE: "LoopDrop"
+  PAGESTYLE: 'LoopDrop'
 })
 
-app.get('/', function(req, res) {
+app.get('/', function (req, res) {
   res.redirect('/')
 })
 
-app.get('/refund/:transaction', function(req, res) {
-  paypal.detail(req.params.transaction, function(err, detail) {
+app.get('/refund/:transaction', function (req, res) {
+  paypal.detail(req.params.transaction, function (err, detail) {
     if (err) throw err
 
     var status = getRefundStatus(detail)
@@ -62,7 +61,7 @@ app.get('/refund/:transaction', function(req, res) {
   })
 })
 
-app.get('/check-version/:version', cors(), function(req, res) {
+app.get('/check-version/:version', cors(), function (req, res) {
   var currentVersion = req.params.version
 
   track(req, 'Check Version', {
@@ -82,11 +81,11 @@ app.get('/check-version/:version', cors(), function(req, res) {
   }
 })
 
-app.get('/update', cookieParser, function(req, res) {
+app.get('/update', cookieParser, function (req, res) {
   var downloadCode = req.cookies['loop-drop-download-code']
   if (downloadCode) {
-    paypal.detail(downloadCode, function(err, detail) {
-      if (detail.PAYMENTSTATUS === 'Completed') {
+    paypal.detail(downloadCode, function (_, detail) {
+      if (detail && detail.PAYMENTSTATUS === 'Completed') {
         res.redirect(root + '/download/' + downloadCode)
       } else {
         render()
@@ -96,7 +95,7 @@ app.get('/update', cookieParser, function(req, res) {
     render()
   }
 
-  function render() {
+  function render () {
     track(req, 'Update Available', {
       latestVersion: latest
     })
@@ -108,10 +107,9 @@ app.get('/update', cookieParser, function(req, res) {
   }
 })
 
-app.post('/update', parseBody, function(req, res) {
+app.post('/update', parseBody, function (req, res) {
   if (req.body.email) {
-    getEmailStatus(req.body.email, function(err, detail) {
-
+    getEmailStatus(req.body.email, function (_, detail) {
       if (detail && detail.STATUS === 'Completed') {
         track(req, 'Request Update', {
           name: detail.FIRSTNAME + ' ' + detail.LASTNAME,
@@ -126,25 +124,23 @@ app.post('/update', parseBody, function(req, res) {
         email: req.body.email,
         status: detail ? detail.STATUS : 'Unknown'
       })
-
     })
-
   } else {
     res.redirect(root + '/update')
   }
-
 })
 
-app.post('/refund/:transaction', parseBody, function(req, res) {
-  paypal.detail(req.params.transaction, function(err, detail) {
-    if (getRefundStatus(detail) === 'Refund-Available') {
+app.post('/refund/:transaction', parseBody, function (req, res) {
+  paypal.detail(req.params.transaction, function (_, detail) {
+    if (detail && getRefundStatus(detail) === 'Refund-Available') {
       track(req, 'Refund', {
         name: detail.FIRSTNAME + ' ' + detail.LASTNAME,
         email: detail.EMAIL,
         memo: req.body.criticism
       })
       logEvent(Date.now(), 'REFUND', userDetail(detail), req.body)
-      paypal.refund(req.params.transaction, req.body.criticism, function(err, result) {
+      paypal.refund(req.params.transaction, req.body.criticism, function (err, result) {
+        if (err) throw err
         res.redirect(root + '/refund/' + req.params.transaction)
       })
     } else {
@@ -153,16 +149,16 @@ app.post('/refund/:transaction', parseBody, function(req, res) {
   })
 })
 
-app.get('/buy-now', function(req, res) {
+app.get('/buy-now', function (req, res) {
   track(req, 'Start Purchase')
-  paypal.pay(Date.now(), "loop-drop", price, "Loop Drop v2 Early Adopter Download", "USD", function(err, url) {
+  paypal.pay(Date.now(), 'loop-drop', price, 'Loop Drop v2 Early Adopter Download', 'USD', function (err, url) {
     if (err) throw err
     res.redirect(url)
   })
 })
 
-app.get('/complete-purchase', function(req, res) {
-  paypal.complete(req.query.token, req.query.PayerID, function(err, detail) {
+app.get('/complete-purchase', function (req, res) {
+  paypal.complete(req.query.token, req.query.PayerID, function (err, detail) {
     if (err) throw err
     track(req, 'Purchase', {
       name: detail.FIRSTNAME + ' ' + detail.LASTNAME,
@@ -175,7 +171,7 @@ app.get('/complete-purchase', function(req, res) {
   })
 })
 
-app.get('/download/:transaction', function(req, res) {
+app.get('/download/:transaction', function (req, res) {
   var downloadUrl = root + '/download-now/' + req.params.transaction
   var currentPlatform = getPlatform(req)
 
@@ -204,11 +200,10 @@ app.get('/download/:transaction', function(req, res) {
   })
 })
 
-app.get('/download-now/:transaction/:platform', function(req, res) {
-  paypal.detail(req.params.transaction, function(err, detail) {
+app.get('/download-now/:transaction/:platform', function (req, res) {
+  paypal.detail(req.params.transaction, function (err, detail) {
     if (err) throw err
     if (getRefundStatus(detail) !== 'Refunded') {
-
       track(req, 'Downloading', {
         name: detail.FIRSTNAME + ' ' + detail.LASTNAME,
         email: detail.EMAIL,
@@ -217,7 +212,7 @@ app.get('/download-now/:transaction/:platform', function(req, res) {
       })
 
       var fileName = platforms[req.params.platform] || platforms.mac
-      res.setHeader('Content-disposition', 'attachment; filename="' + fileName + '"');
+      res.setHeader('Content-disposition', 'attachment; filename="' + fileName + '"')
       res.sendFile(path.join(__dirname, '../files', fileName))
       res.cookie('loop-drop-download-code', req.params.transaction, {
         maxAge: 365 * 24 * 60 * 60
@@ -229,12 +224,12 @@ app.get('/download-now/:transaction/:platform', function(req, res) {
   })
 })
 
-app.get('/cancel-purchase', function(req, res) {
+app.get('/cancel-purchase', function (req, res) {
   track(req, 'Cancel Purchase')
   res.redirect('/')
 })
 
-function getRefundStatus(detail) {
+function getRefundStatus (detail) {
   if (detail.PAYMENTSTATUS !== 'Completed') {
     return detail.PAYMENTSTATUS
   } else {
@@ -244,24 +239,24 @@ function getRefundStatus(detail) {
   }
 }
 
-function userDetail(data) {
+function userDetail (data) {
   return data.FIRSTNAME + ' ' + data.LASTNAME + ' <' + data.EMAIL + '>'
 }
 
-function logEvent(type, user, additional) {
+function logEvent (type, user, additional) {
   console.log.apply(console, arguments)
 }
 
-function getEmailStatus(email, cb) {
-  paypal.search(email, function(err, transactions) {
-    var payments = (transactions || []).filter(function(t) { 
-      return (t.TYPE === 'Payment') 
+function getEmailStatus (email, cb) {
+  paypal.search(email, function (_, transactions) {
+    var payments = (transactions || []).filter(function (t) {
+      return (t.TYPE === 'Payment')
     })
     cb(null, payments[0])
   })
 }
 
-function getPlatform(req) {
+function getPlatform (req) {
   var agent = req.headers['user-agent']
   if (agent.match(/Macintosh/)) {
     return 'mac'

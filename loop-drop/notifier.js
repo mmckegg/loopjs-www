@@ -9,12 +9,11 @@ var user = {
 
 // create reusable transporter object using SMTP transport
 var transporter = Mailer.createTransport({
-    service: 'Gmail',
-    auth: user
-});
+  service: 'Gmail',
+  auth: user
+})
 
-module.exports = function(detail) {
-
+module.exports = function (detail) {
   var message = {
     from: 'Matt McKegg <matt@wetsand.co.nz>',
     to: {
@@ -28,7 +27,7 @@ module.exports = function(detail) {
           'Loop Drop is still experimental and very much in active development. New versions are being released all the time, and you\'ll likely see some major changes!\n\n' +
 
           'If you encounter bugs, please let let me know. I\'ll try to address them as soon as possible.\n\n' +
-          
+
           'Also keep an eye out for an email invite to join the Loop Drop chatroom on Slack!\n\n' +
 
           'Over the next little while, I\'ll be uploading a bunch of tutorial videos to the YouTube channel. Hopefully these will be helpful.\n' +
@@ -42,7 +41,7 @@ module.exports = function(detail) {
           '- Matt' + '\n\n' +
 
           'p.s. If you want a refund due to disappointment go here: \n' +
-          root + '/refund/' + detail.TRANSACTIONID + '\n\n' + 
+          root + '/refund/' + detail.TRANSACTIONID + '\n\n' +
 
           'Refunds must be claimed within 7 days of purchase.'
   }
@@ -52,7 +51,7 @@ module.exports = function(detail) {
       if (err) {
         console.log(err)
       }
-    });
+    })
   } else {
     console.log(message)
   }
@@ -69,9 +68,9 @@ module.exports.resend = function (detail) {
     subject: '[Loop Drop] Your Download Link',
     text: 'Hey there,\n\n' +
 
-          'Here\'s your download link as requested: \n' + 
+          'Here\'s your download link as requested: \n' +
           root + '/download/' + detail.TRANSACTIONID + '\n\n' +
-          
+
           'You can use this link to redownload the app again in the future. Also feel free to share this download link with your friends if they want to try Loop Drop! Just don\'t post it publicly.\n\n' +
 
           '- Matt'
@@ -82,7 +81,7 @@ module.exports.resend = function (detail) {
       if (err) {
         console.log(err)
       }
-    });
+    })
   } else {
     console.log(message)
   }
