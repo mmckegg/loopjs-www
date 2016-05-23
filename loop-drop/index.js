@@ -50,7 +50,7 @@ app.get('/update', cookieParser, function (req, res) {
 app.get('/download', function (req, res) {
   getLatestRelease(function (release) {
     var downloadUrl = downloadRoot + '/' + release.tag_name
-    var currentPlatform = getPlatform(req)
+    var currentPlatform = 'linux64'||getPlatform(req)
 
     track(req, 'Download Page', {
       userPlatform: currentPlatform
@@ -70,6 +70,14 @@ app.get('/download', function (req, res) {
         win64: {
           downloadUrl: downloadUrl + '/Loop.Drop.' + release.tag_name + '.x64.msi',
           name: 'Windows'
+        },
+        linux32: {
+          downloadUrl: downloadUrl + '/Loop.Drop.' + release.tag_name + '-linux-ia32.zip',
+          name: 'Linux ia32'
+        },
+        linux64: {
+          downloadUrl: downloadUrl + '/Loop.Drop.' + release.tag_name + '-linux-x64.zip',
+          name: 'Linux'
         }
       },
 
@@ -113,5 +121,9 @@ function getPlatform (req) {
     return 'win64'
   } else if (agent.match(/Windows/i)) {
     return 'win32'
+  } else if (agent.match(/Linux i686/i)) {
+    return 'linux32'
+  } else if (agent.match(/Linux x86_64/i)) {
+    return 'linux64'
   }
 }

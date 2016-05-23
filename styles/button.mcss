@@ -29,7 +29,7 @@ Button {
   em {
     display: block
     color: #DDD
-    font-size: 70%
+    font-size: 65%
   }
 
   img {
