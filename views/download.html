@@ -8,39 +8,42 @@
   <body>
     <div class='Main'>
       <a href='/'>
-        <img class='.logo' style='float:left;margin-right: 20px;margin-top: 20px' width='300' src='/loop-drop.png' />
+        <img class='.logo' style='float:left;margin-left: 70px;margin-top: 50px' width='200' src='/loop-drop.png' />
       </a>
-      <section>
+      <section style='padding-left: 340px'>
         <header>
-          <h1>Thanks for your payment!<br/><em>Choose a download below</em></h1>
+          <h1>
+            <em>Download</em> Latest Release
+          </h1>
         </header>
-        <div >
-          <p>
-            You should also receive an <strong>email</strong> with a <strong>link to redownload later</strong>. 
-          </p>
-        </div>
         <div class='FileDownload -zip'>
           <a href='<%= platforms[currentPlatform].downloadUrl %>'>
-            <%= platforms[currentPlatform].fileName %>
+            <img src='/download.png' width='25' style='margin-bottom:-4px' /><em>Loop Drop <%= latestVersion %></em> for <%= platforms[currentPlatform].name %>
           </a>
         </div>
-      </section>
-
-      <section>
-        <div>
-          <em>Downloads for Other Platforms</em>:
+        <div style='font-size: 80%;margin-top: -10px'>
+          <a href='<%= changeLogUrl %>'>View Changelog</a> | <a href='https://github.com/mmckegg/loop-drop-app/releases'>Previous Versions</a>
+        </div>
+        <div style='margin-top: 20px'>
+          <em>Other Platforms</em><br/>
           <a href='<%= platforms.win32.downloadUrl %>'>Windows 32-bit</a> |
           <a href='<%= platforms.win64.downloadUrl %>'>Windows 64-bit</a> |
           <a href='<%= platforms.mac.downloadUrl %>'>Mac</a>
         </div>
       </section>
-
-      <section class='-feature'>
+      <section class='-feature' id='contributing'>
         <header>
-          <h1>If you need <em>help</em>, send an <em>email</em> to <a href='mailto:matt@wetsand.co.nz'>matt@wetsand.co.nz</a><br/>or contact me on <em>twitter</em> <a href='https://twitter.com/MattMcKegg'>@MattMcKegg</a></h1>
+          <h1>
+            <em>Contributing</em>
+            <a href='https://www.patreon.com/MattMcKegg' title='Support Loop Drop on Patreon'><img style='float:right' src='/heart.png' width='140' /></a>
+          </h1>
         </header>
         <div>
-          <p>You can <em>request a refund</em> up to 7 days from date of purchase if you discover the app <em>wasn't what you thought it would be</em>. See purchase email for instant refund link.</p>
+          <p>
+            <em><a href='https://github.com/mmckegg/loop-drop-app'>All of the code</a> behind Loop Drop is open source and written in JavaScript.</em> <br/>
+            This makes it possible (and easy!) to modify any aspect of the app to suit your own needs, but most importantly allows you to contribute to the ongoing development.
+          </p>
+          <em>You can also <a href='https://www.patreon.com/MattMcKegg'>support the project financially</a> on Patreon!</em>
         </div>
       </section>
     </div>

@@ -1,0 +1,77 @@
+Button {
+  flex: 1
+  position: relative
+  display: block
+  border: 1px solid #5E8915
+  background-color: #4B6417;
+  color: #FFF;
+  box-shadow: 0 0 10px #222;
+  border-radius: 4px;
+  padding: 10px;
+  cursor: pointer;
+  text-align: left
+  margin-bottom: 5px
+
+  :focus {
+    outline-style: none;
+    color: white;
+    z-index: 100;
+  }
+
+  :hover {
+    border: 1px solid #D5FF8E;
+    background-color: #659600;
+    box-shadow: 0 0 20px #2A2;
+    text-decoration: none
+    z-index: 1
+  }
+
+  em {
+    display: block
+    color: #DDD
+    font-size: 70%
+  }
+
+  img {
+    width: 25px;
+    float: left;
+    margin-right: 8px;
+  }
+
+  -download {
+    font-size: 120%;
+    img {
+      margin-top: 4px
+      margin-right: 10px
+      width: 40px
+    }
+  }
+
+  -donate {
+    background-color: #2B2B2B;
+    border-color: #3E3C3C;
+    color: #DDD
+    :hover {
+      color: white
+      border: 1px solid #EA7C2F;
+      background-color: #794F1F;
+      box-shadow: 0 0 10px #9A822A;
+    }
+  }
+
+  -source {
+    background-color: #2B2B2B;
+    border-color: #3E3C3C;
+    color: #DDD
+    :hover {
+      color: white
+      border: 1px solid #8B9A9C;
+      background-color: #424958;
+      box-shadow: 0 0 10px #3085AD;
+    }
+  }
+}
+
+ButtonContainer {
+  display: flex
+}

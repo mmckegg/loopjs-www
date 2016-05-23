@@ -12,7 +12,7 @@ Main {
 
     padding: 20px
     text-align: center
-    
+
     img {
       width: 250px
       margin-right: 30px
@@ -48,19 +48,6 @@ Main {
       right: 0;
       text-align: center;
       width: 350px;
-
-      div {
-        color: #AAA
-        margin: 10px 0
-        font-size: 70%
-
-        em {
-          color: #DDD
-          font-weight: bold
-          font-style: normal
-        }
-      }
-
     }
 
   }
