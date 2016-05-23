@@ -21,23 +21,26 @@ app.get('/', function (req, res) {
 })
 
 app.get('/check-version/:version', cors(), function (req, res) {
-  var currentVersion = req.params.version
+  getLatestRelease(function (release) {
+    var currentVersion = req.params.version
+    var latest = release.tag_name.slice(1)
 
-  track(req, 'Check Version', {
-    version: currentVersion
-  })
+    track(req, 'Check Version', {
+      version: currentVersion
+    })
 
-  if (compareVersion(currentVersion, latest) < 0) {
-    res.send({
-      updateAvailable: true,
-      version: latest,
-      url: root + '/update?currentVersion=' + currentVersion
-    })
-  } else {
-    res.send({
-      updateAvailable: false
-    })
-  }
+    if (compareVersion(currentVersion, latest) < 0) {
+      res.send({
+        updateAvailable: true,
+        version: latest,
+        url: root + '/update?currentVersion=' + currentVersion
+      })
+    } else {
+      res.send({
+        updateAvailable: false
+      })
+    }
+  }, true)
 })
 
 app.get('/update', cookieParser, function (req, res) {
@@ -77,10 +80,15 @@ app.get('/download', function (req, res) {
   })
 })
 
-function getLatestRelease (cb) {
-  if (lastCheckedRelease > Date.now() - 1 * 60 * 1000) {
+function getLatestRelease (cb, useCache) {
+  if (lastCheckedRelease > Date.now() - 1 * 60 * 1000) { // 1 minute
     cb(latestRelease)
   } else {
+    if (useCache && latestRelease && lastCheckedRelease > Date.now() - 12 * 60 * 1000) { // 12 hours
+      cb(latestRelease)
+      cb = null
+      // but then update anyway!
+    }
     https.get({
       host: 'api.github.com',
       path: '/repos/mmckegg/loop-drop-app/releases/latest',
@@ -91,7 +99,7 @@ function getLatestRelease (cb) {
       res.pipe(concat(function (data) {
         latestRelease = JSON.parse(data) || latestRelease
         lastCheckedRelease = Date.now()
-        cb(latestRelease)
+        cb && cb(latestRelease)
       }))
     })
   }
