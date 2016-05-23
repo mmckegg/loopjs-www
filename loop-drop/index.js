@@ -50,7 +50,7 @@ app.get('/update', cookieParser, function (req, res) {
 app.get('/download', function (req, res) {
   getLatestRelease(function (release) {
     var downloadUrl = downloadRoot + '/' + release.tag_name
-    var currentPlatform = 'linux64'||getPlatform(req)
+    var currentPlatform = getPlatform(req)
 
     track(req, 'Download Page', {
       userPlatform: currentPlatform
